@@ -75,7 +75,7 @@ describe('Book service', () => {
   describe('get all copies', () => {
     it('Should return all books', async () => {
       const result = await booksService.getAllCopies()
-      expect(result).toHaveLength(2)
+      expect(result).toHaveLength(3)
     })
   })
 
@@ -227,7 +227,7 @@ describe('Book service', () => {
 
   describe('update book copy status', () => {
     it('Should return true', async () => {
-      const bookIds = [String(booksData[0].id)]
+      const bookIds = [String(booksData[0].id), String(booksData[0].id)]
       const userId = '655d1091fba90fb470aa806f'
       const result = await booksService.updateMultiAvailableStatus(
         userId,
@@ -238,14 +238,18 @@ describe('Book service', () => {
     })
 
     it('Should return false', async () => {
-      const bookIds = [String(booksData[1].id)]
+      const bookIds = [
+        String(booksData[0].id),
+        String(booksData[0].id),
+        String(booksData[0].id),
+      ]
       const userId = '655d1091fba90fb470aa806f'
       const result = await booksService.updateMultiAvailableStatus(
         userId,
         bookIds,
         false
       )
-      expect(result).toBe(false)
+      expect(result).toEqual([{ ...convertedPopulatedBookData[0], __v: 0 }])
     })
   })
 

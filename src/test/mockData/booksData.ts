@@ -96,6 +96,11 @@ export const BookCopiesData = [
     book_id: new ObjectId('655d13daf50dd1ceca878b43'),
     is_Available: false,
   },
+  {
+    _id: new ObjectId('655ec935fafb289e29fd327a'),
+    book_id: new ObjectId('655d13daf50dd1ceca878b43'),
+    is_Available: true,
+  },
 ]
 
 export const BorrowedBookData = [
