@@ -185,15 +185,12 @@ async function checkout(userId: string): Promise<boolean | Error> {
       const cartId = cart._id
 
       // find list of books in the cart
-      const cartItems = await CartItemRepo.find({ cart_id: cartId }).exec()
+      const cartItem = await CartItemRepo.find({ cart_id: cartId }).exec()
 
       // get all book_id of books
-      const bookIds: string[] = []
-      cartItems.forEach((item) => {
-        if (item.books != null) {
-          bookIds.push(String(item.books))
-        }
-      })
+      const bookIds: string[] = cartItem[0].books.map((book) =>
+        String(book._id)
+      )
 
       // update the availability status for the books
       const res = await BooksService.updateMultiAvailableStatus(
@@ -207,7 +204,7 @@ async function checkout(userId: string): Promise<boolean | Error> {
       }
 
       // delete all the books in cart
-      await CartItemRepo.deleteMany({ cart_id: cartId })
+      await CartItemRepo.deleteOne({ cart_id: cartId })
 
       // delete cart of user
       await cart.deleteOne()
