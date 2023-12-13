@@ -1,25 +1,17 @@
-import { type NextFunction, type Request, type Response } from 'express'
+import { type NextFunction, type Response } from 'express'
 
 import { ApiError } from '../utils/ApiError.js'
 import CartsService from '../services/cartsService.js'
+import { type WithAuthRequest } from '../types/User.js'
 
-async function getAllCarts(_: Request, res: Response): Promise<void> {
-  const carts = await CartsService.getAllCarts()
-  res.json(carts)
-}
-
-async function getAllCartItems(_: Request, res: Response): Promise<void> {
-  const cartItems = await CartsService.getAllCartItems()
-  res.json(cartItems)
-}
-
-async function getCartByUserId(
-  req: Request,
+async function getUserCart(
+  req: WithAuthRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const id = req.params.userId
-  const cartItems = await CartsService.getCartByUserId(id)
+  const decoded = req.decoded
+  const userId = decoded?.userId as string
+  const cartItems = await CartsService.getCartByUserId(userId)
 
   if (cartItems === null) {
     next(ApiError.notFound('Cart not found.'))
@@ -33,11 +25,12 @@ async function getCartByUserId(
 }
 
 async function addToCart(
-  req: Request,
+  req: WithAuthRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const userId = req.params.userId
+  const decoded = req.decoded
+  const userId = decoded?.userId as string
   const bookId = req.body.book_id
 
   const result = await CartsService.addToCart({ userId, bookId })
@@ -54,11 +47,12 @@ async function addToCart(
 }
 
 async function removeFromCart(
-  req: Request,
+  req: WithAuthRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const userId = req.params.userId
+  const decoded = req.decoded
+  const userId = decoded?.userId as string
   const bookId = req.params.bookId
 
   const result = await CartsService.removeFromCart({ userId, bookId })
@@ -74,32 +68,13 @@ async function removeFromCart(
   res.sendStatus(204)
 }
 
-async function deleteCart(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
-  const userId = req.params.userId
-
-  const result = await CartsService.deleteCart(userId)
-
-  if (result instanceof Error) {
-    next(ApiError.badRequest('Bad request.', result.message))
-    return
-  } else if (!result) {
-    next(ApiError.notFound('Cart not found.'))
-    return
-  }
-
-  res.sendStatus(204)
-}
-
 async function checkout(
-  req: Request,
+  req: WithAuthRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  const userId = req.params.userId
+  const decoded = req.decoded
+  const userId = decoded?.userId as string
 
   const result = await CartsService.checkout(userId)
 
@@ -115,11 +90,8 @@ async function checkout(
 }
 
 export default {
-  getAllCarts,
-  getAllCartItems,
-  getCartByUserId,
+  getUserCart,
   addToCart,
   removeFromCart,
-  deleteCart,
   checkout,
 }

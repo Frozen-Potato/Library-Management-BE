@@ -37,10 +37,15 @@ router.get(
 )
 
 router.post('/', validateCreateUser, UsersController.createNewUser)
+
 router.delete('/:userId', UsersController.deleteUser)
+
+router.put('/update', checkAuth, validateUpdateUser, UsersController.updateUser)
+
 router.put(
   '/:userId',
   checkAuth,
+  checkPermission('USERS_UPDATE'),
   validateUpdateUser,
   UsersController.updateUser
 )

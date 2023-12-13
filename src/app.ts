@@ -14,6 +14,7 @@ import bookAuthorRoutes from './routes/bookAuthorRoutes.js'
 import booksRoutes from './routes/bookRoutes.js'
 import categoriesRoutes from './routes/categoriesRoute.js'
 import cartsRoutes from './routes/cartsRoutes.js'
+import cartRoutes from './routes/cartRoutes.js'
 import crudStatsRoutes from './routes/crudStatsRoutes.js'
 import permissionsRoutes from './routes/permissionsRoutes.js'
 import rolesRoutes from './routes/rolesRoutes.js'
@@ -52,6 +53,7 @@ app.use('/api/v1/crud-stats', crudStatsRoutes)
 app.use('/api/v1/roles', rolesRoutes)
 app.use('/api/v1/permissions', permissionsRoutes)
 app.use('/api/v1/book-author', bookAuthorRoutes)
+app.use('/api/v1/cart', cartRoutes)
 app.use('/api/v1/carts', cartsRoutes)
 app.use('/api/v1/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 

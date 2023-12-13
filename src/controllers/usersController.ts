@@ -3,8 +3,8 @@ import type { NextFunction, Request, Response } from 'express'
 import UserRolesService from '../services/userRolesService.js'
 import UsersService from '../services/usersService.js'
 import { ApiError } from '../utils/ApiError.js'
-import mongoose from 'mongoose'
 import { type WithAuthRequest } from '../types/User.js'
+import RoleRepo from '../models/rolesModel.js'
 
 export async function findAllUsers(_: Request, res: Response): Promise<void> {
   const users = await UsersService.findAll()
@@ -82,11 +82,13 @@ export async function createNewUser(
     )
     return
   } else if (!(user instanceof Error)) {
-    const roleId = new mongoose.Types.ObjectId('6569d985a7c5b908fba44d07')
-    await UserRolesService.addRoleToUser({
-      user_id: user.id,
-      role_id: roleId,
-    })
+    const role = await RoleRepo.findOne({ title: 'Borrower' })
+    if (role !== null && role !== undefined) {
+      await UserRolesService.addRoleToUser({
+        user_id: user.id,
+        role_id: role.id,
+      })
+    }
   }
 
   res.status(201).json(user)
@@ -112,6 +114,25 @@ export async function deleteUser(
 }
 
 export async function updateUser(
+  req: WithAuthRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  const decoded = req.decoded
+  const userId = decoded?.userId as string
+  const body = req.body
+  const user = await UsersService.updateUser(userId, body)
+  if (user === null) {
+    next(ApiError.notFound('User not found'))
+    return
+  } else if (user instanceof Error) {
+    next(ApiError.badRequest('Bad request.', user.message))
+    return
+  }
+
+  res.json(user)
+}
+export async function updateUserById(
   req: Request,
   res: Response,
   next: NextFunction
@@ -138,4 +159,5 @@ export default {
   createNewUser,
   deleteUser,
   updateUser,
+  updateUserById,
 }
