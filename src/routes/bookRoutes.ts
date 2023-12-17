@@ -95,6 +95,9 @@ router.post(
   BookController.createNewBook
 )
 
+//
+// router.post('/all', BookController.createCopies)
+
 // Create new Book copy with given id
 router.post(
   '/copy/:id',

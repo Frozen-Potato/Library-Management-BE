@@ -107,6 +107,20 @@ const createNewBook = async (
     : res.status(201).json(result)
 }
 
+// const createCopies = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ): Promise<void> => {
+//   const books = await BooksServices.getAll()
+//   if (books.length > 0) {
+//     books.forEach(async (book) => {
+//       await BooksServices.createOneCopy(String(book._id))
+//     })
+//   }
+//   res.sendStatus(200)
+// }
+
 const createNewCopy = async (
   req: Request,
   res: Response,
@@ -254,6 +268,7 @@ export default {
   getBookCopiesWithBookId,
   getUserBorrowHistory,
   filterByQuery,
+  // createCopies,
   createNewBook,
   createNewCopy,
   updateBookInfo,

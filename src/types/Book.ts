@@ -35,6 +35,9 @@ export type PopulatedBook = Omit<Book, 'author' | 'category'> & {
     id: mongoose.Types.ObjectId
     fullName: string
   }>
+  availableCopies?: Array<{
+    total?: number
+  }>
 }
 
 export type bookBorrowHistory = {

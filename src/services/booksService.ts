@@ -42,7 +42,26 @@ const getAll = async (): Promise<PopulatedBook[]> => {
         as: 'category',
       },
     },
+    {
+      $lookup: {
+        from: 'copiesbooks',
+        localField: '_id',
+        foreignField: 'book_id',
+        pipeline: [
+          { $match: { is_Available: true } },
+          { $count: 'total' },
+          { $project: { total: { $ifNull: ['$total', 0] } } },
+        ],
+        as: 'availableCopies',
+      },
+    },
   ])
+
+  books.forEach((data: any) => {
+    if (data.availableCopies.length === 0) {
+      data.availableCopies.push({ total: 0 })
+    }
+  })
 
   return books as PopulatedBook[]
 }
@@ -155,6 +174,19 @@ const getFilteredBook = async (
         },
       },
       {
+        $lookup: {
+          from: 'copiesbooks',
+          localField: '_id',
+          foreignField: 'book_id',
+          pipeline: [
+            { $match: { is_Available: true } },
+            { $count: 'total' },
+            { $project: { total: { $ifNull: ['$total', 0] } } },
+          ],
+          as: 'availableCopies',
+        },
+      },
+      {
         $sort: {
           [sortBy]: sortOrder,
         },
@@ -166,6 +198,12 @@ const getFilteredBook = async (
         },
       },
     ])
+
+    result[0].data.forEach((data: any) => {
+      if (data.availableCopies.length === 0) {
+        data.availableCopies.push({ total: 0 })
+      }
+    })
 
     return {
       data: result[0].data,
