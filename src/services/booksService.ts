@@ -15,46 +15,60 @@ import {
 import { type PaginatedData, type AtleastOne } from '../types/AdditionalType.js'
 import UserRepo from '../models/usersModel.js'
 
+const populatingAuthor = {
+  $lookup: {
+    from: 'authors',
+    localField: 'author',
+    foreignField: '_id',
+    pipeline: [
+      {
+        $addFields: {
+          fullName: { $concat: ['$firstName', ' ', '$lastName'] },
+        },
+      },
+      { $project: { fullName: 1 } },
+    ],
+    as: 'author',
+  },
+}
+
+const populatingCategory: {
+  $lookup: {
+    from: string
+    localField: string
+    foreignField: string
+    pipeline: Array<{ $project: { name: number } }>
+    as: string
+  }
+} = {
+  $lookup: {
+    from: 'categories',
+    localField: 'category',
+    foreignField: '_id',
+    pipeline: [{ $project: { name: 1 } }],
+    as: 'category',
+  },
+}
+
+const AddAvailCopies = {
+  $lookup: {
+    from: 'copiesbooks',
+    localField: '_id',
+    foreignField: 'book_id',
+    pipeline: [
+      { $match: { is_Available: true } },
+      { $count: 'total' },
+      { $project: { total: { $ifNull: ['$total', 0] } } },
+    ],
+    as: 'availableCopies',
+  },
+}
+
 const getAll = async (): Promise<PopulatedBook[]> => {
   const books = await BooksRepo.aggregate([
-    {
-      $lookup: {
-        from: 'authors',
-        localField: 'author',
-        foreignField: '_id',
-        pipeline: [
-          {
-            $addFields: {
-              fullName: { $concat: ['$firstName', ' ', '$lastName'] },
-            },
-          },
-          { $project: { fullName: 1 } },
-        ],
-        as: 'author',
-      },
-    },
-    {
-      $lookup: {
-        from: 'categories',
-        localField: 'category',
-        foreignField: '_id',
-        pipeline: [{ $project: { name: 1 } }],
-        as: 'category',
-      },
-    },
-    {
-      $lookup: {
-        from: 'copiesbooks',
-        localField: '_id',
-        foreignField: 'book_id',
-        pipeline: [
-          { $match: { is_Available: true } },
-          { $count: 'total' },
-          { $project: { total: { $ifNull: ['$total', 0] } } },
-        ],
-        as: 'availableCopies',
-      },
-    },
+    populatingAuthor,
+    populatingCategory,
+    AddAvailCopies,
   ])
 
   books.forEach((data: any) => {
@@ -128,31 +142,8 @@ const getFilteredBook = async (
 
   try {
     const result = await BooksRepo.aggregate([
-      {
-        $lookup: {
-          from: 'authors',
-          localField: 'author',
-          foreignField: '_id',
-          pipeline: [
-            {
-              $addFields: {
-                fullName: { $concat: ['$firstName', ' ', '$lastName'] },
-              },
-            },
-            { $project: { fullName: 1 } },
-          ],
-          as: 'author',
-        },
-      },
-      {
-        $lookup: {
-          from: 'categories',
-          localField: 'category',
-          foreignField: '_id',
-          pipeline: [{ $project: { name: 1 } }],
-          as: 'category',
-        },
-      },
+      populatingAuthor,
+      populatingCategory,
       {
         $match: {
           ...cleanedFilter,
@@ -173,19 +164,7 @@ const getFilteredBook = async (
           ],
         },
       },
-      {
-        $lookup: {
-          from: 'copiesbooks',
-          localField: '_id',
-          foreignField: 'book_id',
-          pipeline: [
-            { $match: { is_Available: true } },
-            { $count: 'total' },
-            { $project: { total: { $ifNull: ['$total', 0] } } },
-          ],
-          as: 'availableCopies',
-        },
-      },
+      AddAvailCopies,
       {
         $sort: {
           [sortBy]: sortOrder,
@@ -229,31 +208,8 @@ const getOneById = async (
           _id: id,
         },
       },
-      {
-        $lookup: {
-          from: 'authors',
-          localField: 'author',
-          foreignField: '_id',
-          pipeline: [
-            {
-              $addFields: {
-                fullName: { $concat: ['$firstName', ' ', '$lastName'] },
-              },
-            },
-            { $project: { fullName: 1 } },
-          ],
-          as: 'author',
-        },
-      },
-      {
-        $lookup: {
-          from: 'categories',
-          localField: 'category',
-          foreignField: '_id',
-          pipeline: [{ $project: { name: 1 } }],
-          as: 'category',
-        },
-      },
+      populatingAuthor,
+      populatingCategory,
     ])
     return book.length > 0 ? (book[0] as PopulatedBook) : null
   } catch (e) {
@@ -272,31 +228,8 @@ const getOneByISBN = async (
           ISBN,
         },
       },
-      {
-        $lookup: {
-          from: 'authors',
-          localField: 'author',
-          foreignField: '_id',
-          pipeline: [
-            {
-              $addFields: {
-                fullName: { $concat: ['$firstName', ' ', '$lastName'] },
-              },
-            },
-            { $project: { fullName: 1 } },
-          ],
-          as: 'author',
-        },
-      },
-      {
-        $lookup: {
-          from: 'categories',
-          localField: 'category',
-          foreignField: '_id',
-          pipeline: [{ $project: { name: 1 } }],
-          as: 'category',
-        },
-      },
+      populatingAuthor,
+      populatingCategory,
     ])
     return book.length > 0 ? (book[0] as PopulatedBook) : null
   } catch (e) {
