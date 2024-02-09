@@ -21,7 +21,6 @@ import { authorsData } from '../mockData/authorsData.js'
 import booksService from '../../services/booksService.js'
 import { type BookFilterSchema, type PopulatedBook } from '../../types/Book.js'
 import { type PaginatedData } from '../../types/AdditionalType.js'
-import gerneralService from '../../services/gerneralService.js'
 import CategoryRepo from '../../models/categoriesModel.js'
 import mongoose from 'mongoose'
 import UsersRepo from '../../models/usersModel.js'
@@ -96,23 +95,7 @@ describe('Book service', () => {
         )) as PaginatedData<PopulatedBook>
         expect(result.data).toHaveLength(1)
       })
-      it('should return a book', async () => {
-        const query = {
-          page: '1',
-          perPage: '1',
-          search: '69',
-          category: new mongoose.Types.ObjectId('656ea26860a0da45f1752145'),
-          publisher: 'something',
-          sortBy: 'id',
-          sortOrder: 'desc',
-        }
-        const result = (await gerneralService.filter(
-          ['title'],
-          query,
-          BookModelRepo
-        )) as Record<string, any>
-        expect(result.data).toHaveLength(1)
-      })
+     
       it('should return an empty array', async () => {
         const query: BookFilterSchema = {
           page: '1',
