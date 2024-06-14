@@ -14,5 +14,34 @@ export const swaggerDefinition = {
         bearerFormat: 'JWT',
       },
     },
+    schemas: {
+      User: {
+        type: 'object',
+        properties: {
+          firstName: {
+            type: 'string',
+          },
+          lasName: {
+            type: 'string',
+          },
+          email: {
+            type: 'string',
+            format: 'email',
+          },
+          address: {
+            type: 'string',
+          },
+          avatar: {
+            type: 'string',
+          },
+          phoneNumber: {
+            type: 'string',
+          },
+          password: {
+            type: 'string',
+          },
+        },
+      },
+    },
   },
 }
