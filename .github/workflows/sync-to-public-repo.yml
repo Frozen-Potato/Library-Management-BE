@@ -20,7 +20,7 @@ jobs:
           git config --local user.name ${{ secrets.GIT_USER_NAME }}
           git config --local user.email ${{ secrets.GIT_USER_EMAIL }}
       - name: Push changes
-        uses: ad-m/github-push-action@main
+        uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GH_PAT }}
           repository: ${{ secrets.PUBLIC_REPO_URL }}
