@@ -14,6 +14,7 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
+          persist-credentials: false
           token: ${{ secrets.GH_PAT }}
       - name: Commit files
         run: |
