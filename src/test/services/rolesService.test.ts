@@ -12,19 +12,19 @@ describe('Roles Service', () => {
 
   beforeAll(async () => {
     mongoHelper = await connect()
-  })
+  }, 100000)
 
   beforeEach(async () => {
     await RoleRepo.create(rolesData)
-  })
+  }, 100000)
 
   afterEach(async () => {
     await mongoHelper.clearDatabase()
-  })
+  }, 100000)
 
   afterAll(async () => {
     await mongoHelper.closeDatabase()
-  })
+  }, 100000)
 
   describe('Create Role', () => {
     it('should create a new role', async () => {

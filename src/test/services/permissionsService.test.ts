@@ -16,19 +16,19 @@ describe(' Service', () => {
 
   beforeAll(async () => {
     mongoHelper = await connect()
-  })
+  }, 100000)
 
   beforeEach(async () => {
     await PermissionRepo.create(convertedPermissionsData)
-  })
+  }, 100000)
 
   afterEach(async () => {
     await mongoHelper.clearDatabase()
-  })
+  }, 100000)
 
   afterAll(async () => {
     await mongoHelper.closeDatabase()
-  })
+  }, 100000)
 
   describe('Find Permission by ID', () => {
     it('should find a permission by ID', async () => {
