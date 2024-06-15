@@ -22,7 +22,6 @@ import booksService from '../../services/booksService.js'
 import { type BookFilterSchema, type PopulatedBook } from '../../types/Book.js'
 import { type PaginatedData } from '../../types/AdditionalType.js'
 import CategoryRepo from '../../models/categoriesModel.js'
-import mongoose from 'mongoose'
 import UsersRepo from '../../models/usersModel.js'
 import { convertedUsersData } from '../mockData/usersData.js'
 
@@ -31,7 +30,7 @@ describe('Book service', () => {
 
   beforeAll(async () => {
     mongoHelper = await connect()
-  })
+  }, 100000)
 
   beforeEach(async () => {
     await AuthorsRepo.create(authorsData[0])
@@ -40,15 +39,15 @@ describe('Book service', () => {
     await BorrowedBookRepo.create(BorrowedBookData)
     await CategoryRepo.create(convertedCategoryData[0])
     await UsersRepo.create(convertedUsersData[1])
-  })
+  }, 100000)
 
   afterEach(async () => {
     await mongoHelper.clearDatabase()
-  })
+  }, 100000)
 
   afterAll(async () => {
     await mongoHelper.closeDatabase()
-  })
+  }, 100000)
 
   describe('get all books', () => {
     it('Should return all books', async () => {
@@ -95,7 +94,7 @@ describe('Book service', () => {
         )) as PaginatedData<PopulatedBook>
         expect(result.data).toHaveLength(1)
       })
-     
+
       it('should return an empty array', async () => {
         const query: BookFilterSchema = {
           page: '1',

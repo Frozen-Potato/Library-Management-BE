@@ -9,19 +9,19 @@ describe('User Service', () => {
 
   beforeAll(async () => {
     mongoHelper = await connect()
-  })
+  }, 100000)
 
   beforeEach(async () => {
     await UserRepo.create(convertedUsersData)
-  })
+  }, 100000)
 
   afterEach(async () => {
     await mongoHelper.clearDatabase()
-  })
+  }, 100000)
 
   afterAll(async () => {
     await mongoHelper.closeDatabase()
-  })
+  }, 100000)
 
   describe('Find all users', () => {
     it('should find all users', async () => {

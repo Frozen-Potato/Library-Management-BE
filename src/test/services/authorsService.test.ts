@@ -10,19 +10,19 @@ describe('Testing /authors services', () => {
 
   beforeAll(async () => {
     mongoHelper = await connect()
-  })
+  }, 100000)
 
   beforeEach(async () => {
     await AuthorRepo.create(authorsData[0])
-  })
+  }, 100000)
 
   afterEach(async () => {
     await mongoHelper.clearDatabase()
-  })
+  }, 100000)
 
   afterAll(async () => {
     await mongoHelper.closeDatabase()
-  })
+  }, 100000)
 
   describe('Create a new author', () => {
     test('should create a new author to the database', async () => {
