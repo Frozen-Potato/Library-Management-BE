@@ -14,13 +14,12 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
-          persist-credentials: false
+          persist-credentials: true
           token: ${{ secrets.GH_PAT }}
       - name: Commit files
         run: |
           git config --local user.name ${{ secrets.GIT_USER_NAME }}
           git config --local user.email ${{ secrets.GIT_USER_EMAIL }}
-          git commit -a -m "Add changes"
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
