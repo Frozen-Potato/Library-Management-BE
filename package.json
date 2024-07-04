@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "description": "",
-  "main": "dist/server.js",
+  "main": "dist/src/server.js",
   "scripts": {
     "lint": "eslint src/**/*.ts",
     "build:watch": "tsc -w",
@@ -15,7 +15,8 @@
     "init:all": "npm run init:permissions && npm run init:admin",
     "test": "jest --detectOpenHandles --force-exit",
     "test:coverage": "jest --coverage --detectOpenHandles --force-exit",
-    "test:watch": "jest --watch --coverage --detectOpenHandles"
+    "test:watch": "jest --watch --coverage --detectOpenHandles",
+    "start": "node dist/src/server.js"
   },
   "keywords": [],
   "author": "",
