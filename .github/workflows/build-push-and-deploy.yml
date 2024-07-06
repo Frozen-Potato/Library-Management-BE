@@ -1,10 +1,9 @@
-name: Deploy to DockerHub
+name: Build Docker Image, Push to DockerHub and Deploy to VPS server
 
 on: 
     push:
         branches: 
             - main
-            - Docker-and-VPS-runner
 
 jobs:
     build_and_push:
@@ -32,3 +31,15 @@ jobs:
               push: true
               tags: ${{ steps.meta.outputs.tags }}
               labels: ${{ steps.meta.outputs.labels }}
+
+          - name: Deploy to VPS
+            uses: appleboy/ssh-action@v1.0.3
+            with:
+              host: ${{ secrets.HOST }}
+              username: ${{ secrets.USERNAME }}
+              key: ${{ secrets.KEY }}
+              port: ${{ secrets.PORT }}
+              passphrase: ${{ secrets.PASSPHRASE }}
+              script: |
+                cd ${{ secrets.LOCATION }}
+                docker compose pull && docker compose up -d
