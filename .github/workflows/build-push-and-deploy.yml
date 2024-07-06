@@ -32,3 +32,15 @@ jobs:
               push: true
               tags: ${{ steps.meta.outputs.tags }}
               labels: ${{ steps.meta.outputs.labels }}
+
+          - name: Deploy to VPS
+            uses: appleboy/ssh-action@v1.0.3
+            with:
+              host: ${{ secrets.HOST }}
+              username: ${{ secrets.USERNAME }}
+              key: ${{ secrets.KEY }}
+              port: ${{ secrets.PORT }}
+              passphrase: ${{ secrets.PASSPHRASE }}
+              script: |
+                cd $LOCATION
+                docker compose pull && docker compose up -d
