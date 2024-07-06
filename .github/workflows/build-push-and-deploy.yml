@@ -1,10 +1,9 @@
-name: Deploy to DockerHub
+name: Build Docker Image, Push to DockerHub and Deploy to VPS server
 
 on: 
     push:
         branches: 
             - main
-            - Docker-and-VPS-runner
 
 jobs:
     build_and_push:
