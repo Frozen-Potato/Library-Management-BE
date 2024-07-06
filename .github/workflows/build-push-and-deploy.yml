@@ -42,5 +42,5 @@ jobs:
               port: ${{ secrets.PORT }}
               passphrase: ${{ secrets.PASSPHRASE }}
               script: |
-                cd ${{ env.LOCATION }}
+                cd ${{ secrets.LOCATION }}
                 docker compose pull && docker compose up -d
