@@ -49,7 +49,7 @@ This project is licensed under the MIT License.
 
 ## Project Live Link
 
-[Click here](https://library-management-system-api-172j.onrender.com/api/v1/api-docs) to access the live version of the project.
+[Click here](https://expressapi.frozenpotato.homes/api/v1/api-docs/) to access the live version of the project.
 
 ## Contact Information
 
