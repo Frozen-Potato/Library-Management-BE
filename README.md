@@ -134,10 +134,6 @@ Role-based access control (RBAC) is implemented to restrict access to certain en
 - [tuannguyen-TN](https://github.com/tuannguyen-TN)
 - [TungNguyen12](https://github.com/TungNguyen12)
 
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
-
 ---
 
 For further details and updates, please refer to the [official repository](https://github.com/Frozen-Potato/Library-Management-BE).
