@@ -90,7 +90,7 @@ router.get('/copy', BookController.getAllBookCopies)
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/BorrowHistoryItem'
+ *                 $ref: '#/components/schemas/BookBorrowHistory'
  *       401:
  *         description: Unauthorized
  */
