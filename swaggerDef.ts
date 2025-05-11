@@ -42,6 +42,61 @@ export const swaggerDefinition = {
           },
         },
       },
+      Book: {
+        type: 'object',
+        properties: {
+          _id: { type: 'string' },
+          ISBN: { type: 'string' },
+          title: { type: 'string' },
+          edition: { type: 'string' },
+          category: {
+            type: 'string',
+            description: 'ObjectId referencing Category',
+          },
+          description: { type: 'string' },
+          publisher: { type: 'string' },
+          img: { type: 'string' },
+          author: {
+            type: 'array',
+            items: {
+              type: 'string',
+              description: 'ObjectId referencing Author',
+            },
+          },
+        },
+      },
+      BookBorrowHistory: {
+        type: 'object',
+        properties: {
+          history: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                borrowedDate: {
+                  type: 'string',
+                  format: 'date-time',
+                },
+                returnedDate: {
+                  type: 'string',
+                  format: 'date-time',
+                },
+                returned: {
+                  type: 'boolean',
+                },
+                book: {
+                  type: 'object',
+                  properties: {
+                    _id: { type: 'string' },
+                    title: { type: 'string' },
+                    img: { type: 'string' },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     },
   },
 }
